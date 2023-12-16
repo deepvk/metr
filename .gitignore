@@ -6,3 +6,6 @@ __pycache__/
 
 wm_env
 _test.py
+
+wandb
+setup.sh
