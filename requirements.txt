@@ -10,6 +10,7 @@ git+https://github.com/Alphonsce/tree-ring-watermark.git
 
 ftfy
 wandb
+argparse
 scikit-learn
 torchvision==0.14.0
 datasets
