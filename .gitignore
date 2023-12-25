@@ -10,3 +10,5 @@ _test.py
 wandb
 login.sh
 setup.sh
+
+fid_outputs
