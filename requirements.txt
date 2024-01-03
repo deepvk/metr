@@ -1,23 +1,21 @@
-# install_requires = [
-#     deps["torch"],
-#     deps["diffusers"],
-#     deps["transformers"],
-# ]
-
-# Will install deps recursively from install_requires
-# Installs only files from package_dir
+git+https://github.com/Alphonsce/WatermarkAttacker.git
 git+https://github.com/Alphonsce/tree-ring-watermark.git
 
+transformers==4.31.0
+torch==1.13.0
+torchvision==0.14.0
+diffusers==0.14.0
+opencv-python
+invisible-watermark
+scikit-image
+matplotlib
+bm3d
+compressai
+torch_fidelity
+accelerate
+datasets
+onnxruntime
 ftfy
 wandb
-argparse
 scikit-learn
-torchvision==0.14.0
-datasets
-accelerate
-
-# Version 0.11.0 does not support Inverse DDIM anymore
-# diffusers==0.14.0
-
-# Version 4.23 does not support CLIP anymore
-# transformers==4.31.0
+argparse
