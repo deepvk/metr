@@ -19,3 +19,5 @@ ftfy
 wandb
 scikit-learn
 argparse
+
+pytorch-msssim
