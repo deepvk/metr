@@ -1,0 +1,3 @@
+[submodule "tree-ring-watermark"]
+	path = tree-ring-watermark
+	url = https://github.com/Alphonsce/tree-ring-watermark.git

@@ -1,0 +1,1 @@
+accelerate launch -m tree_ring_watermark.detect_tree_ring --run_name detection_testing --w_channel 3 --w_pattern ring --start 0 --end 1 --reference_model ViT-g-14 --reference_model_pretrain laion2b_s12b_b42k
