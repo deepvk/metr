@@ -15,3 +15,5 @@ fid_outputs
 images
 
 _temp
+
+sd2_decoder.pth

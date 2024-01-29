@@ -4,6 +4,3 @@
 [submodule "attacks/WatermarkAttacker"]
 	path = attacks/WatermarkAttacker
 	url = https://github.com/Alphonsce/WatermarkAttacker.git
-[submodule "stable_signature"]
-	path = stable_signature
-	url = https://github.com/Alphonsce/stable_signature.git
