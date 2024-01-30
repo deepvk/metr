@@ -34,5 +34,7 @@ pytorch-fid==0.3.0
 pandas==1.5.3
 matplotlib
 
-ldm==0.1.0
 pytorch-lightning
+
+# It requires torch>=2.1, but it isn't critical
+xformers
