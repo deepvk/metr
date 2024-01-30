@@ -2,8 +2,8 @@ git+https://github.com/Alphonsce/WatermarkAttacker.git
 git+https://github.com/Alphonsce/tree-ring-watermark.git
 
 transformers==4.31.0
-torch==1.13.0
-torchvision==0.14.0
+torch==2.1.2
+torchvision==0.16.2
 diffusers==0.14.0
 opencv-python
 invisible-watermark
@@ -36,5 +36,5 @@ matplotlib
 
 pytorch-lightning
 
-# It requires torch>=2.1, but it isn't critical
+# It requires torch==2.1.2
 xformers
