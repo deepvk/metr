@@ -17,3 +17,5 @@ images
 _temp
 
 sd2_decoder.pth
+
+*.png
