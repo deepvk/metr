@@ -19,3 +19,5 @@ _temp
 sd2_decoder.pth
 
 *.png
+
+*.csv
