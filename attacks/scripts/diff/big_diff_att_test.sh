@@ -1,6 +1,6 @@
 START=10
 END=500
-STEP_SIZE=10
+STEP_SIZE=20
 
 for ((STEPS=START; STEPS<=END; STEPS+=STEP_SIZE)); do
   accelerate launch -m tree_ring_watermark.run_tree_ring_watermark_attack \
