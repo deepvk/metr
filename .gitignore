@@ -21,3 +21,4 @@ sd2_decoder.pth
 *.png
 
 *.csv
+*.pt
