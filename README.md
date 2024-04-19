@@ -1,27 +1,63 @@
-# py_template
+# METR watermark.
 
-Template repository for Python projects.
-Use it to create a new repo, but feel free to adopt for your use-cases.
+## About
+This is the implementation of METR watermark. We propose an attack resistant watermark to inject large amount of unique messages without image quality
 
-## Structure
+## Setup:
 
-There are several directories to organize your code:
-- `src`: Main directory for your modules, e.g., models or dataset implementations, train loops, metrics.
-- `scripts`: Directory to define scripts to interact with modules, e.g., run training or evaluation, run data preprocessing, collect statistic.
-- `tests`: Directory for tests, this may include multiple unit tests for different parts of logic.
+Clone repository:
+```bash
+git clone https://github.com/deepvk/metr.git
+```
 
-You can create new directories for your need.
-For example, you can create a `Notebooks` folder for Jupyter notebooks, such as `EDA.ipynb`.
+Install dependencies:
+```bash
+cd metr
+pip install -r requirements.txt 
+```
 
-## Usage
+## Running METR watermark:
+Generate images with random messages and evaluate detection metrics:
 
-First of all,
-navigate to [`pyproject.toml`](./pyproject.toml) and set up `name` and `url` properties according to your project.
+```bash
 
-For correct work of the import system:
-1. Use absolute import statements starting from `src`. For example, `from src.model import MySuperModel`
-2. Execute scripts as modules, i.e. use `python -m scripts.<module_name>`. See details about `-m` flag [here](https://docs.python.org/3/using/cmdline.html#cmdoption-m).
+```
 
-To keep your code clean, use `black`, `isort`, and `mypy`
-(install everything from [`requirements.dev.txt`](./requirements.dev.txt)).
-[`pyproject.toml`](./pyproject.toml) already defines their parameters, but you can change them if you want.
+Evaluate FID metric. You can download MSCOCO-5000 dataset from: link
+
+```bash
+
+```
+
+## Running METR++ watermark
+Code related to Stable Signature can be found here
+
+Fine-tune VAE decoder to given ID:
+
+```bash
+
+```
+
+Generate images with METR++ watermark and evaluate METR part of it:
+```bash
+
+```
+
+Evaluate Stable Signature part of METR++
+```bash
+
+```
+
+## Reproducing experiments from paper:
+
+Go to scripts directory:
+
+```bash
+cd metr/scripts
+```
+
+Diffusion and VAE attack on METR:
+
+```bash
+bash .sh
+```
