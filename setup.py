@@ -98,9 +98,9 @@ install_requires = [
 ]
 
 setup(
-    name="tree_ring_watermark",
-    version="0.1.1",
-    description="tree_ring_watermark",
+    name="metr",
+    version="1.0.0",
+    description="METR watermarking implementation",
     long_description=open("README.md", "r", encoding="utf-8").read(),
     long_description_content_type="text/markdown",
     license="MIT",

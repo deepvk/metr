@@ -24,3 +24,5 @@ sd2_decoder.pth
 *.pt
 
 *.DS_Store
+
+scripts_old
