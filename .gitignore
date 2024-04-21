@@ -22,3 +22,5 @@ sd2_decoder.pth
 
 *.csv
 *.pt
+
+*.DS_Store
