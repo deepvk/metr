@@ -1,6 +1,0 @@
-[submodule "tree-ring-watermark"]
-	path = tree-ring-watermark
-	url = https://github.com/Alphonsce/tree-ring-watermark.git
-[submodule "attacks/WatermarkAttacker"]
-	path = attacks/WatermarkAttacker
-	url = https://github.com/Alphonsce/WatermarkAttacker.git
