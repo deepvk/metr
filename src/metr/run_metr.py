@@ -319,8 +319,8 @@ if __name__ == '__main__':
 
     # watermark
     parser.add_argument('--w_seed', default=999999, type=int)
-    parser.add_argument('--w_channel', default=0, type=int)
-    parser.add_argument('--w_pattern', default='rand')
+    parser.add_argument('--w_channel', default=3, type=int)
+    parser.add_argument('--w_pattern', default='ring')
     parser.add_argument('--w_mask_shape', default='circle')
     parser.add_argument('--w_radius', default=10, type=int)
     parser.add_argument('--w_measurement', default='l1_complex')
