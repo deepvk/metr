@@ -1,4 +1,4 @@
-# METR watermark.
+# METR watermark :tractor:
 
 ## About
 This is the implementation of METR watermark. We propose an attack resistant watermark to inject large amount of unique messages without image quality reduction.
@@ -35,7 +35,7 @@ All METR related code was made in our fork of Tree-Ring repository, which is
 
 #### Generate images with random message:
 
-To save images locally include additional argument "--save_locally" and provide path with "--local_path /path/to/save".
+To save images locally include additional argument `--save_locally` and provide path with `--local_path /path/to/save`.
 
 ```bash
 accelerate launch -m metr.run_metr \
@@ -150,7 +150,7 @@ In example down below we fine-tune VAE decoder on samples from MSCOCO dataset an
 ```
 
 ### Generate images with METR++ watermark and evaluate METR part of it:
-To generate images with METR++ watermark, just remove "--no_stable_sig" argument and provide a path to tuned VAE decoder
+To generate images with METR++ watermark, just remove `--no_stable_sig` argument and provide a path to tuned VAE decoder: `--decoder_state_dict_path /path/to/decoder/weights`
 ```bash
 
 ```
