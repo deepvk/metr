@@ -346,7 +346,7 @@ if __name__ == '__main__':
     parser.add_argument('--vae_attack_quality', default=3, type=int)
 
     # METR++
-    parser.add_argument('--decoder_state_dict_path', default='sd2_decoder.pth')
+    parser.add_argument('--decoder_state_dict_path', default='finetune_ldm_decoder/ldm_decoder_checkpoint_000.pth')
     parser.add_argument('--no_stable_sig', action='store_true')
     parser.add_argument('--stable_sig_full_model_config', default="v2-inference.yaml")
     parser.add_argument('--stable_sig_full_model_ckpt', default='v2-1_512-ema-pruned.ckpt')

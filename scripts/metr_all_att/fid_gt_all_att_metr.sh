@@ -27,7 +27,7 @@ for ((i=0; i<${#attacks[@]}; i++)); do
       --run_generation \
       --additional_metrics \
       --run_no_w \
-      --image_folder /data/varlamov_a_data/tree-ring-watermark/msg_fid_gt_all_att_no_vae/${names[i]}  \
+      --image_folder msg_fid_gt_all_att_no_vae/${names[i]}  \
       --msg_type binary \
       --use_random_msgs \
       --msg_scaler 100 \
@@ -43,7 +43,7 @@ accelerate launch -m metr.run_metr_fid\
   --run_generation \
   --additional_metrics \
   --run_no_w \
-  --image_folder /data/varlamov_a_data/tree-ring-watermark/msg_fid_gt_all_att_no_vae/diff_150  \
+  --image_folder msg_fid_gt_all_att_no_vae/diff_150  \
   --msg_type binary \
   --use_random_msgs \
   --msg_scaler 100 \
@@ -60,7 +60,7 @@ accelerate launch -m metr.run_metr_fid\
   --run_generation \
   --additional_metrics \
   --run_no_w \
-  --image_folder /data/varlamov_a_data/tree-ring-watermark/msg_fid_gt_all_att_no_vae/vae_2018_q_1  \
+  --image_folder msg_fid_gt_all_att_no_vae/vae_2018_q_1  \
   --msg_type binary \
   --use_random_msgs \
   --msg_scaler 100 \
@@ -78,7 +78,7 @@ accelerate launch -m metr.run_metr_fid\
   --run_generation \
   --additional_metrics \
   --run_no_w \
-  --image_folder /data/varlamov_a_data/tree-ring-watermark/msg_fid_gt_all_att_no_vae/no_attack3  \
+  --image_folder msg_fid_gt_all_att_no_vae/no_attack3  \
   --msg_type binary \
   --use_random_msgs \
   --msg_scaler 100 
