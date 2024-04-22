@@ -5,7 +5,11 @@ This is the implementation of METR watermark. We propose an attack resistant wat
 
 ## Setup:
 
-**We ran all experiments on python==3.10**
+**We ran all experiments on python==3.10**:
+
+```bash
+conda create -n metr python==3.10
+```
 
 Clone repository:
 ```bash
@@ -27,9 +31,6 @@ accelerate config default
 ```
 
 ## Running METR watermark:
-
-All METR related code was made in our fork of Tree-Ring repository, which is
-[here](https://github.com/Alphonsce/tree-ring-watermark).
 
 ### METR Detection metrics to wandb:
 
@@ -102,11 +103,7 @@ unzip fid_outputs.zip
 
 #### FID on ground-truth images (FID gt):
 
-```bash
-
-```
-
-#### FID on generated images (FID gen):
+Argument `--image_folder` is where images are saved.
 
 ```bash
 accelerate launch -m metr.run_metr_fid \
@@ -119,7 +116,27 @@ accelerate launch -m metr.run_metr_fid \
   --run_generation \
   --additional_metrics \
   --run_no_w \
-  --image_folder fid_eval_gen \
+  --image_folder fid_eval_gt_metr \
+  --msg_type binary \
+  --use_random_msgs \
+  --msg_scaler 100
+```
+
+#### FID on generated images (FID gen):
+To evaluate FID on generated images, add argument `--target_clean_generated`:
+
+```bash
+accelerate launch -m metr.run_metr_fid \
+  --project_name fid_gen \
+  --model_id stabilityai/stable-diffusion-2-1-base \
+  --run_name no_attack --w_channel 3 --w_pattern ring \
+  --start 0 --end 5000 \
+  --with_tracking \
+  --w_radius 10 \
+  --run_generation \
+  --additional_metrics \
+  --run_no_w \
+  --image_folder fid_eval_gen_metr \
   --msg_type binary \
   --use_random_msgs \
   --msg_scaler 100 \
@@ -141,23 +158,90 @@ wget https://huggingface.co/stabilityai/stable-diffusion-2-1-base/resolve/main/v
 wget https://raw.githubusercontent.com/Stability-AI/stablediffusion/main/configs/stable-diffusion/v2-inference.yaml
 ```
 
+You can download our pre-trained for message `111010110101000001010111010011010100010000100111` VAE decoder from [here](https://huggingface.co/Alphonsce/St_Sig_vae_decoder/resolve/main/ldm_decoder_checkpoint_000.pth?download=true).
+
 ### Fine-tune VAE decoder to given ID:
 
-In example down below we fine-tune VAE decoder on samples from MSCOCO dataset and evaluate on images previously generated with METR watermark.
+In example down below we fine-tune VAE decoder on samples from MSCOCO dataset and evaluate on images previously generated with METR watermark in `generated_images` folder. Pretrained VAE decoder weights will be saved in `finetune_ldm_decoder/ldm_decoder_checkpoint_000.pth` by default. You can change the name of checkpoint with `--checkpoint_name` argument.
 
 ```bash
+TRAIN_DIR=fid_outputs/coco/ground_truth
+VAL_DIR=generated_images/imgs_w
 
+  accelerate launch -m metr.finetune_ldm_decoder --num_keys 1 \
+  --ldm_config v2-inference.yaml \
+  --ldm_ckpt v2-1_512-ema-pruned.ckpt \
+  --msg_decoder_path dec_48b_whit.torchscript.pt \
+  --train_dir $TRAIN_DIR \
+  --val_dir $VAL_DIR \
+  --with_tracking \
+  --project_name finetune_ldm_decoder \
+  --run_name test \
+  --output_dir finetune_ldm_decoder \
+  --batch_size 4 \
+  --steps 100 \
+  --num_val_imgs 200 \
+  --num_keys 1 \
+  --not_rand_key \
+  --key_str 111010110101000001010111010011010100010000100111
 ```
 
 ### Generate images with METR++ watermark and evaluate METR part of it:
-To generate images with METR++ watermark, just remove `--no_stable_sig` argument and provide a path to tuned VAE decoder: `--decoder_state_dict_path /path/to/decoder/weights`
+To generate images with METR++ watermark, just remove `--no_stable_sig` argument and provide a path to tuned VAE decoder: `--decoder_state_dict_path /path/to/decoder/weights`:
 ```bash
+VAE_DECODER_PATH=finetune_ldm_decoder/ldm_decoder_checkpoint_000.pth
 
+accelerate launch -m metr.run_metr \
+  --project_name metr_detection \
+  --model_id stabilityai/stable-diffusion-2-1-base \
+  --run_name no_attack --w_channel 3 --w_pattern ring \
+  --start 0 --end 1000 \
+  --reference_model ViT-g-14 --reference_model_pretrain laion2b_s12b_b42k \
+  --with_tracking \
+  --msg_type binary \
+  --use_random_msgs \
+  --w_radius 10 \
+  --msg_scaler 100 \
+  --save_locally \
+  --local_path metr_pp_generated_images \
+  --decoder_state_dict_path $VAE_DECODER_PATH
 ```
 
 ### Evaluate Stable Signature part of METR++
+Evaluation is performed on a folder of generated images, you need to pass folder into `--` with images generated with Stable-Signature watermark.
 ```bash
+EVAL_FOLDER=metr_pp_generated_images/imgs_w
 
+accelerate launch -m metr.metr_pp_eval_stable_sig \
+  --with_tracking \
+  --project_name eval_st_sig \
+  --run_name test \
+  --eval_imgs False --eval_bits True \
+  --img_dir $EVAL_FOLDER \
+  --output_dir eval_st_sig_logs \
+  --msg_decoder_path dec_48b_whit.torchscript.pt \
+  --attack_mode none \
+  --key_str 111010110101000001010111010011010100010000100111
+```
+
+### Evaluate FID for METR++:
+To evaluate FID for images with METR++ watermark pass `--use_stable_sig` argument.
+```bash
+accelerate launch -m metr.run_metr_fid \
+  --project_name fid_gen \
+  --model_id stabilityai/stable-diffusion-2-1-base \
+  --run_name no_attack --w_channel 3 --w_pattern ring \
+  --start 0 --end 5000 \
+  --with_tracking \
+  --w_radius 10 \
+  --run_generation \
+  --additional_metrics \
+  --run_no_w \
+  --image_folder fid_eval_gt_metr_pp \
+  --msg_type binary \
+  --use_random_msgs \
+  --msg_scaler 100 \
+  --use_stable_sig
 ```
 
 ## Reproducing experiments from paper:
@@ -174,4 +258,29 @@ bash .sh
 
 ```
 
+---
 # References:
+
+## Tree-Ring watermark:
+
+### [Repository link]()
+
+### [Paper link]()
+
+#### Citation:
+
+## Stable Signature:
+
+### [Repository link]()
+
+### [Paper link]()
+
+#### Citation:
+
+## Generative Model watermark attacker:
+
+### [Repository link]()
+
+### [Paper link]()
+
+#### Citation:
