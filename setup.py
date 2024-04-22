@@ -111,7 +111,7 @@ setup(
     
     package_data={
         # 'tree_ring_watermark': ['src/tree_ring_watermark/open_clip/bpe_simple_vocab_16e6.txt.gz', 'src/tree_ring_watermark/open_clip/model_configs/*.json']
-        "": ["*.gz", "*.json"]
+        "": ["*.gz", "*.json", "*.pth"]
     },
 
     python_requires=">=3.7.0",
