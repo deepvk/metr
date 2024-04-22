@@ -74,7 +74,7 @@ def main(args):
     pipe = pipe.to(device)
 
     if args.use_stable_sig:
-        pipe = change_pipe_vae_decoder(pipe, weights_path=args.decoder_state_dict_path)
+        pipe = change_pipe_vae_decoder(pipe, weights_path=args.decoder_state_dict_path, args=args)
         print("VAE CHANGED!")
 
     # hard coding for now
@@ -316,8 +316,8 @@ if __name__ == '__main__':
 
     # watermark
     parser.add_argument('--w_seed', default=999999, type=int)
-    parser.add_argument('--w_channel', default=0, type=int)
-    parser.add_argument('--w_pattern', default='rand')
+    parser.add_argument('--w_channel', default=3, type=int)
+    parser.add_argument('--w_pattern', default='ring')
     parser.add_argument('--w_mask_shape', default='circle')
     parser.add_argument('--w_radius', default=10, type=int)
     parser.add_argument('--w_measurement', default='l1_complex')
@@ -336,12 +336,13 @@ if __name__ == '__main__':
     parser.add_argument('--msg_type', default='rand', help="Can be: rand or binary or decimal")
     parser.add_argument('--msg', default='1110101101')
     parser.add_argument('--use_random_msgs', action='store_true', help="Generate random message each step of cycle")
-    parser.add_argument('--msgs_file', default=None, help="Path to file, whicha")
     parser.add_argument('--msg_scaler', default=100, type=int, help="Scaling coefficient of message")
 
-    # Stable-Signature arguments:
+    # METR++:
     parser.add_argument('--use_stable_sig', action='store_true')
-    parser.add_argument('--decoder_state_dict_path', default='sd2_decoder.pth')
+    parser.add_argument('--decoder_state_dict_path', default='finetune_ldm_decoder/ldm_decoder_checkpoint_000.pth')
+    parser.add_argument('--stable_sig_full_model_config', default="v2-inference.yaml")
+    parser.add_argument('--stable_sig_full_model_ckpt', default='v2-1_512-ema-pruned.ckpt')
 
     # for image distortion
     parser.add_argument('--r_degree', default=None, type=float)
