@@ -70,7 +70,3 @@ accelerate launch -m metr.run_metr \
   --msg_type binary \
   --use_random_msgs \
   --msg_scaler 100 \
-
-# ---------------------
-
-bash /data/varlamov_a_data/tree-ring-watermark/scripts/stable_sig_w_metr_attacks/generate_part1.sh

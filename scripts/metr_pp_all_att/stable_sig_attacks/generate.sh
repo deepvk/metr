@@ -19,7 +19,7 @@ names=(
 )
 
 PROJECT=generate_stable_tree_all_attacks
-OUTPUT_ROOT=/data/varlamov_a_data/tree-ring-watermark/all_attacks/stable_sig
+OUTPUT_ROOT=all_attacks/stable_sig
 
 for ((i=0; i<${#attacks[@]}; i++)); do
     accelerate launch -m metr.run_metr \
@@ -86,4 +86,4 @@ accelerate launch -m metr.run_metr \
 
 #-------
 
-bash /data/varlamov_a_data/tree-ring-watermark/scripts/stable_tree_all_attacks/eval.sh
+bash scripts/stable_tree_all_attacks/eval.sh

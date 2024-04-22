@@ -11,7 +11,7 @@ names=(
 )
 
 PROJECT=generate_stable_tree_all_attacks
-OUTPUT_ROOT=/data/varlamov_a_data/tree-ring-watermark/all_attacks/stable_sig
+OUTPUT_ROOT=all_attacks/stable_sig
 
 for ((i=0; i<${#names[@]}; i++)); do
     accelerate launch -m metr.metr_pp_eval_stable_sig \
@@ -20,8 +20,8 @@ for ((i=0; i<${#names[@]}; i++)); do
       --run_name ${names[i]} \
       --eval_imgs False --eval_bits True \
       --img_dir $OUTPUT_ROOT/${names[i]}/imgs_w \
-      --output_dir /data/varlamov_a_data/tree-ring-watermark/all_attacks_logs \
-      --msg_decoder_path /data/varlamov_a_data/tree-ring-watermark/dec_48b_whit.torchscript.pt \
+      --output_dir all_attacks_logs \
+      --msg_decoder_path dec_48b_whit.torchscript.pt \
       --attack_mode none \
       --key_str 111010110101000001010111010011010100010000100111
 done

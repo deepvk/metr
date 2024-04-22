@@ -195,6 +195,8 @@ accelerate launch -m metr.run_metr \
   --project_name metr_detection \
   --model_id stabilityai/stable-diffusion-2-1-base \
   --run_name no_attack --w_channel 3 --w_pattern ring \
+  --stable_sig_full_model_config v2-inference.yaml \
+  --stable_sig_full_model_ckpt v2-1_512-ema-pruned.ckpt \
   --start 0 --end 1000 \
   --reference_model ViT-g-14 --reference_model_pretrain laion2b_s12b_b42k \
   --with_tracking \
@@ -213,8 +215,8 @@ Evaluation is performed on a folder of generated images, you need to pass folder
 EVAL_FOLDER=metr_pp_generated_images/imgs_w
 
 accelerate launch -m metr.metr_pp_eval_stable_sig \
-  --with_tracking \
   --project_name eval_st_sig \
+  --with_tracking \
   --run_name test \
   --eval_imgs False --eval_bits True \
   --img_dir $EVAL_FOLDER \
@@ -230,6 +232,7 @@ To evaluate FID for images with METR++ watermark pass `--use_stable_sig` argumen
 accelerate launch -m metr.run_metr_fid \
   --project_name fid_gen \
   --model_id stabilityai/stable-diffusion-2-1-base \
+  
   --run_name no_attack --w_channel 3 --w_pattern ring \
   --start 0 --end 5000 \
   --with_tracking \
@@ -246,14 +249,13 @@ accelerate launch -m metr.run_metr_fid \
 
 ## Reproducing experiments from paper:
 
-Go to scripts directory:
+### Diffusion and VAE attack on METR:
 
-Diffusion and VAE attack on METR:
-
+#### Diffusion attack:
 ```bash
-bash .sh
+bash ./scripts/.sh
 ```
-
+#### VAE attack:
 ```bash
 
 ```
@@ -263,24 +265,18 @@ bash .sh
 
 ## Tree-Ring watermark:
 
-### [Repository link]()
+### [Repository link](https://github.com/YuxinWenRick/tree-ring-watermark)
 
-### [Paper link]()
-
-#### Citation:
+### [Paper link](https://arxiv.org/abs/2305.20030)
 
 ## Stable Signature:
 
-### [Repository link]()
+### [Repository link](https://github.com/facebookresearch/stable_signature)
 
-### [Paper link]()
-
-#### Citation:
+### [Paper link](https://arxiv.org/abs/2303.15435)
 
 ## Generative Model watermark attacker:
 
-### [Repository link]()
+### [Repository link](https://github.com/XuandongZhao/WatermarkAttacker)
 
-### [Paper link]()
-
-#### Citation:
+### [Paper link](https://arxiv.org/abs/2306.01953)

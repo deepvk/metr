@@ -76,5 +76,3 @@ accelerate launch -m metr.run_metr \
   --no_stable_sig \
 
 # ----------------
-
-bash /data/varlamov_a_data/tree-ring-watermark/scripts/stable_sig_w_metr_attacks/generate_part2.sh

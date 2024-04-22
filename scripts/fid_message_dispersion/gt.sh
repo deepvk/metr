@@ -26,7 +26,7 @@ for ((j=0; j<${#messages[@]}; j++)); do
       --w_radius 10 \
       --run_generation \
       --additional_metrics \
-      --image_folder /data/varlamov_a_data/tree-ring-watermark/worst_message/gt_${S[i]}_${messages[j]} \
+      --image_folder worst_message/gt_${S[i]}_${messages[j]} \
       --msg_type binary \
       --msg ${messages[j]} \
       --msg_scaler ${S[i]}

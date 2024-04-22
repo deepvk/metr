@@ -33,3 +33,6 @@ scripts_old
 finetune_ldm_decoder
 
 *_images
+
+
+fid_eval_*

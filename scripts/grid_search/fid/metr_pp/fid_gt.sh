@@ -9,7 +9,7 @@ for ((s = 60; s <= 100; s += 20 )); do
           --run_generation \
           --additional_metrics \
           --run_no_w \
-          --image_folder /data/varlamov_a_data/tree-ring-watermark/msg_fid_grid_gt/r=$r_s=$s \
+          --image_folder msg_fid_grid_gt/r=$r_s=$s \
           --msg_type binary \
           --use_random_msgs \
           --msg_scaler $s
