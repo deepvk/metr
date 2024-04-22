@@ -348,8 +348,8 @@ if __name__ == '__main__':
     # METR++
     parser.add_argument('--decoder_state_dict_path', default='sd2_decoder.pth')
     parser.add_argument('--no_stable_sig', action='store_true')
-    parser.add_argument('--stable_sig_full_model_config', default="/data/varlamov_a_data/tree-ring-watermark/stable_signature/sd/v2-inference.yaml")
-    parser.add_argument('--stable_sig_full_model_ckpt', default='/data/varlamov_a_data/tree-ring-watermark/stable_signature/sd/v2-1_512-ema-pruned.ckpt')
+    parser.add_argument('--stable_sig_full_model_config', default="v2-inference.yaml")
+    parser.add_argument('--stable_sig_full_model_ckpt', default='v2-1_512-ema-pruned.ckpt')
 
     # Message encryption (for testing: putting the same message on each image, but they can be different):
     parser.add_argument('--msg_type', default='rand', help="Can be: rand or binary or decimal")

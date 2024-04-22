@@ -305,9 +305,9 @@ if __name__ == '__main__':
     parser.add_argument('--run_no_w', action='store_true')
     parser.add_argument('--gen_seed', default=0, type=int)
 
-    parser.add_argument('--prompt_file', default='/data/varlamov_a_data/dima/fid_outputs/coco/meta_data.json')
-    parser.add_argument('--gt_folder', default='/data/varlamov_a_data/dima/fid_outputs/coco/ground_truth')
-    parser.add_argument('--image_folder', default='/data/varlamov_a_data/dima/fid_outputs/coco/fid_run')
+    parser.add_argument('--prompt_file', default='fid_outputs/coco/meta_data.json')
+    parser.add_argument('--gt_folder', default='fid_outputs/coco/ground_truth')
+    parser.add_argument('--image_folder', default='fid_outputs/coco/fid_run')
     # Compute metrics with gen_no_w and gen_w:
     parser.add_argument('--target_clean_generated', action='store_true')
 
@@ -341,7 +341,7 @@ if __name__ == '__main__':
 
     # Stable-Signature arguments:
     parser.add_argument('--use_stable_sig', action='store_true')
-    parser.add_argument('--decoder_state_dict_path', default='/data/varlamov_a_data/tree-ring-watermark/ldm_decoders/sd2_decoder.pth')
+    parser.add_argument('--decoder_state_dict_path', default='sd2_decoder.pth')
 
     # for image distortion
     parser.add_argument('--r_degree', default=None, type=float)
