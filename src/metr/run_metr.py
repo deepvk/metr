@@ -65,7 +65,7 @@ def main(args):
     pipe = pipe.to(device)
 
     if not args.no_stable_sig:
-        pipe = change_pipe_vae_decoder(pipe, weights_path=args.decoder_state_dict_path)
+        pipe = change_pipe_vae_decoder(pipe, weights_path=args.decoder_state_dict_path, args=args)
         print("VAE CHANGED!")
 
     # reference model
@@ -306,7 +306,7 @@ if __name__ == '__main__':
     # logs and metrics:
     parser.add_argument('--freq_log', default=20, type=int)
     parser.add_argument('--save_locally', action='store_true')
-    parser.add_argument('--local_path', default='/data/varlamov_a_data/dima/images')
+    parser.add_argument('--local_path', default='generated_images')
 
     parser.add_argument('--num_images', default=1, type=int)
     parser.add_argument('--guidance_scale', default=7.5, type=float)
@@ -345,9 +345,11 @@ if __name__ == '__main__':
     parser.add_argument('--vae_attack_name', default='cheng2020-anchor')
     parser.add_argument('--vae_attack_quality', default=3, type=int)
 
-    # Stable-Tree
-    parser.add_argument('--decoder_state_dict_path', default='/data/varlamov_a_data/tree-ring-watermark/ldm_decoders/sd2_decoder.pth')
+    # METR++
+    parser.add_argument('--decoder_state_dict_path', default='sd2_decoder.pth')
     parser.add_argument('--no_stable_sig', action='store_true')
+    parser.add_argument('--stable_sig_full_model_config', default="/data/varlamov_a_data/tree-ring-watermark/stable_signature/sd/v2-inference.yaml")
+    parser.add_argument('--stable_sig_full_model_ckpt', default='/data/varlamov_a_data/tree-ring-watermark/stable_signature/sd/v2-1_512-ema-pruned.ckpt')
 
     # Message encryption (for testing: putting the same message on each image, but they can be different):
     parser.add_argument('--msg_type', default='rand', help="Can be: rand or binary or decimal")

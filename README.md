@@ -37,10 +37,10 @@ All METR related code was made in our fork of Tree-Ring repository, which is
 
 To save images locally include additional argument "--save_locally" and provide path with "--local_path /path/to/save".
 
-
 ```bash
-accelerate launch -m tree_ring_watermark.run_stable_tree \
+accelerate launch -m metr.run_metr \
   --project_name metr_detection \
+  --model_id stabilityai/stable-diffusion-2-1-base \
   --run_name no_attack --w_channel 3 --w_pattern ring \
   --start 0 --end 1000 \
   --reference_model ViT-g-14 --reference_model_pretrain laion2b_s12b_b42k \
@@ -57,8 +57,9 @@ accelerate launch -m tree_ring_watermark.run_stable_tree \
 #### Generate image with fixed message and fixed prompt:
 
 ```bash
-accelerate launch -m tree_ring_watermark.run_stable_tree \
+accelerate launch -m metr.run_metr \
   --project_name fixed_msg \
+  --model_id stabilityai/stable-diffusion-2-1-base \
   --run_name fixed_msg --w_channel 3 --w_pattern ring \
   --start 0 --end 1 \
   --reference_model ViT-g-14 --reference_model_pretrain laion2b_s12b_b42k \
@@ -69,6 +70,25 @@ accelerate launch -m tree_ring_watermark.run_stable_tree \
   --msg_scaler 100 \
   --msg 1010101010 \
   --given_prompt "sci-fi bernese mountain dog"
+```
+
+#### Perform diffusion model attack on METR:
+
+```bash
+accelerate launch -m metr.run_metr \
+  --project_name metr_diff_att \
+  --run_name diff_150 --w_channel 3 --w_pattern ring \
+  --start 0 --end 1000 \
+  --reference_model ViT-g-14 --reference_model_pretrain laion2b_s12b_b42k \
+  --with_tracking \
+  --w_radius 10 \
+  --msg_type binary \
+  --use_random_msgs \
+  --msg_scaler 100 \
+  --no_stable_sig \
+  --use_attack \
+  --attack_type diff \
+  --diff_attack_steps 150
 ```
 
 ### Evaluate FID for METR
@@ -89,8 +109,9 @@ unzip fid_outputs.zip
 #### FID on generated images (FID gen):
 
 ```bash
-accelerate launch -m tree_ring_watermark.run_tree_ring_watermark_fid \
+accelerate launch -m metr.run_metr_fid \
   --project_name fid_gen \
+  --model_id stabilityai/stable-diffusion-2-1-base \
   --run_name no_attack --w_channel 3 --w_pattern ring \
   --start 0 --end 5000 \
   --with_tracking \
@@ -113,6 +134,13 @@ Install weights for WM extractor for Stable Signature (taken from [official Stab
 wget https://dl.fbaipublicfiles.com/ssl_watermarking/dec_48b_whit.torchscript.pt
 ```
 
+Install full model checkpoint and config to train VAE decoder of it:
+
+```bash
+wget https://huggingface.co/stabilityai/stable-diffusion-2-1-base/resolve/main/v2-1_512-ema-pruned.ckpt
+wget https://raw.githubusercontent.com/Stability-AI/stablediffusion/main/configs/stable-diffusion/v2-inference.yaml
+```
+
 ### Fine-tune VAE decoder to given ID:
 
 In example down below we fine-tune VAE decoder on samples from MSCOCO dataset and evaluate on images previously generated with METR watermark.
@@ -121,12 +149,13 @@ In example down below we fine-tune VAE decoder on samples from MSCOCO dataset an
 
 ```
 
-Generate images with METR++ watermark and evaluate METR part of it:
+### Generate images with METR++ watermark and evaluate METR part of it:
+To generate images with METR++ watermark, just remove "--no_stable_sig" argument and provide a path to tuned VAE decoder
 ```bash
 
 ```
 
-Evaluate Stable Signature part of METR++
+### Evaluate Stable Signature part of METR++
 ```bash
 
 ```
@@ -134,10 +163,6 @@ Evaluate Stable Signature part of METR++
 ## Reproducing experiments from paper:
 
 Go to scripts directory:
-
-```bash
-cd metr/scripts
-```
 
 Diffusion and VAE attack on METR:
 

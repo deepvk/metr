@@ -26,3 +26,6 @@ sd2_decoder.pth
 *.DS_Store
 
 scripts_old
+
+*.ckpt
+*.yaml

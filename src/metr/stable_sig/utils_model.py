@@ -163,8 +163,7 @@ class Sampler:
 
 def change_pipe_vae_decoder(pipe,
     weights_path,
-    ckpt_path='/data/varlamov_a_data/tree-ring-watermark/stable_signature/sd/v2-1_512-ema-pruned.ckpt',
-    config_path="/data/varlamov_a_data/tree-ring-watermark/stable_signature/sd/v2-inference.yaml"
+    args
     ):
     '''
     - loads dict of weights into predefined vae config 
@@ -172,6 +171,9 @@ def change_pipe_vae_decoder(pipe,
     -------------
     weights_path: path to weights of decoder
     '''
+    config_path = args.stable_sig_full_model_config
+    ckpt_path = args.stable_sig_full_model_ckpt
+
     ldm_config = config_path
     ldm_ckpt = ckpt_path
 
@@ -189,22 +191,8 @@ def change_pipe_vae_decoder(pipe,
     state_dict = torch.load(weights_path)
 
     print(f'>>> Loaded VAE decoder weights from {weights_path}')
-    # print(
-    #     dir(state_dict)
-    # )
     unexpected_keys = ldm_aef.load_state_dict(state_dict, strict=False)
-    # print(
-    #     unexpected_keys
-    # )
-    # print("you should check that the decoder keys are correctly matched")
 
     pipe.vae.decode = (lambda x,  *args, **kwargs: Sampler(ldm_aef.decode(x)))  # здесь было еще .unsqueeze(0)
-
-    # def decode_foo(x, *args, **kwargs):
-    #     torch.save(x, f"/data/varlamov_a_data/dima/plots/latent_imgs/latent_{torch.randint(0, 100_000, [1]).item()}.pt")
-
-    #     return Sampler(ldm_aef.decode(x))
-    
-    # pipe.vae.decode = decode_foo
 
     return pipe
