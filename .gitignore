@@ -36,3 +36,4 @@ finetune_ldm_decoder
 
 
 fid_eval_*
+val_mock
