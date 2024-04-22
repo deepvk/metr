@@ -29,3 +29,7 @@ scripts_old
 
 *.ckpt
 *.yaml
+
+finetune_ldm_decoder
+
+*_images
