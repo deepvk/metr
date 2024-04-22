@@ -88,6 +88,7 @@ def get_parser():
     group = parser.add_argument_group('Experiments parameters')
     aa("--num_keys", type=int, default=1, help="Number of fine-tuned checkpoints to generate")
     aa("--output_dir", type=str, default="output/", help="Output directory for logs and images (Default: /output)")
+    aa("--checkpoint_name", default=None)
     aa("--seed", type=int, default=0)
     aa("--debug", type=utils.bool_inst, default=False, help="Debug mode")
 
@@ -274,7 +275,10 @@ def main(params):
 
         # Save checkpoint
         # torch.save(save_dict, os.path.join(params.output_dir, f"checkpoint_{ii_key:03d}.pth"))
-        torch.save(ldm_decoder.state_dict(), os.path.join(params.output_dir, f"ldm_decoder_checkpoint_{ii_key:03d}.pth"))
+        if not params.checkpoint_name:
+            torch.save(ldm_decoder.state_dict(), os.path.join(params.output_dir, f"ldm_decoder_checkpoint_{ii_key:03d}.pth"))
+        else:
+            torch.save(ldm_decoder.state_dict(), os.path.join(params.output_dir, f"{params.checkpoint_name}.pth"))
         torch.save(optimizer.state_dict(), os.path.join(params.output_dir, f"optimizer_checkpoint_{ii_key:03d}.pth"))
         torch.save(params, os.path.join(params.output_dir, f"params_checkpoint_{ii_key:03d}.pth"))
 
