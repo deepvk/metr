@@ -95,11 +95,7 @@ accelerate launch -m metr.run_metr \
 ### Evaluate FID for METR
 #### Download dataset and extract:
 
-```bash
-wget -O fid_outputs.zip https://huggingface.co/datasets/Alphonsce/MSCOCO_zip/resolve/main/fid_outputs.zip?download=true
-unzip fid_outputs.zip
-```
-[Google drive version if HF is not working](https://drive.google.com/drive/u/1/folders/1v0xj-8Yx8vZ_4qGsC5EU5FJBvEWTFmE3)
+[Google drive version](https://drive.google.com/drive/u/1/folders/1v0xj-8Yx8vZ_4qGsC5EU5FJBvEWTFmE3)
 
 #### FID on ground-truth images (FID gt):
 
@@ -144,7 +140,6 @@ accelerate launch -m metr.run_metr_fid \
 ```
 
 ## Running METR++ watermark
-We forked Stable Signature repository to adjust it to be comparable with METR. It can be found [here](https://github.com/Alphonsce/stable_signature/).
 
 Install weights for WM extractor for Stable Signature (taken from [official Stable-Signature repository](https://github.com/facebookresearch/stable_signature) )
 ```bash
@@ -156,14 +151,6 @@ Install full model checkpoint and config to train VAE decoder of it:
 ```bash
 wget https://huggingface.co/stabilityai/stable-diffusion-2-1-base/resolve/main/v2-1_512-ema-pruned.ckpt
 wget https://raw.githubusercontent.com/Stability-AI/stablediffusion/main/configs/stable-diffusion/v2-inference.yaml
-```
-
-**You can download our pre-trained VAE Decoder for message `111010110101000001010111010011010100010000100111`:**
-
-```bash
-mkdir -p finetune_ldm_decoder
-cd finetune_ldm_decoder
-wget -O ldm_decoder_checkpoint_000.pth https://huggingface.co/Alphonsce/St_Sig_vae_decoder/resolve/main/ldm_decoder_checkpoint_000.pth?download=true
 ```
 
 ### Fine-tune VAE decoder to given ID:

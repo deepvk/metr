@@ -104,7 +104,6 @@ setup(
     long_description=open("README.md", "r", encoding="utf-8").read(),
     long_description_content_type="text/markdown",
     license="MIT",
-    url="https://github.com/deepvk/metr",
     package_dir={"": "src"},
     packages=find_packages("src"),
     include_package_data=True,

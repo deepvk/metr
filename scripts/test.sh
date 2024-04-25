@@ -27,25 +27,24 @@
 #   --attack_type diff \
 #   --diff_attack_steps 150
 
-# TRAIN_DIR=fid_outputs/coco/ground_truth
-# VAL_DIR=generated_images/imgs_w
+TRAIN_DIR=fid_outputs/coco/ground_truth
+VAL_DIR=generated_images/imgs_w
 
-#   accelerate launch -m metr.finetune_ldm_decoder --num_keys 1 \
-#   --ldm_config v2-inference.yaml \
-#   --ldm_ckpt v2-1_512-ema-pruned.ckpt \
-#   --msg_decoder_path dec_48b_whit.torchscript.pt \
-#   --train_dir $TRAIN_DIR \
-#   --val_dir $VAL_DIR \
-#   --with_tracking \
-#   --project_name finetune_ldm_decoder \
-#   --run_name test \
-#   --output_dir finetune_ldm_decoder \
-#   --batch_size 4 \
-#   --steps 100 \
-#   --num_val_imgs 200 \
-#   --num_keys 1 \
-#   --not_rand_key \
-#   --key_str 111010110101000001010111010011010100010000100111
+  accelerate launch -m metr.finetune_ldm_decoder --num_keys 1 \
+  --ldm_config v2-inference.yaml \
+  --ldm_ckpt v2-1_512-ema-pruned.ckpt \
+  --msg_decoder_path dec_48b_whit.torchscript.pt \
+  --train_dir $TRAIN_DIR \
+  --val_dir $VAL_DIR \
+  --with_tracking \
+  --project_name finetune_ldm_decoder \
+  --run_name test \
+  --output_dir finetune_ldm_decoder \
+  --batch_size 4 \
+  --steps 100 \
+  --num_val_imgs 200 \
+  --not_rand_key \
+  --key_str 111010110101000001010111010011010100010000100111
 
 # -------------------------
 
@@ -101,39 +100,39 @@
   # --msg_scaler 100 \
   # --use_stable_sig
 
-S=(
-    60
-    70
-    80
-    90
-    100
-)
+# S=(
+#     60
+#     70
+#     80
+#     90
+#     100
+# )
 
-messages=(
-  "1111111111"
-  "0000000000"
-  "1010101010"
-  "1100110011"
-  "0011001100"
-  "1111100000"
-  "0000011111"
-)
+# messages=(
+#   "1111111111"
+#   "0000000000"
+#   "1010101010"
+#   "1100110011"
+#   "0011001100"
+#   "1111100000"
+#   "0000011111"
+# )
 
-for ((j=0; j<${#messages[@]}; j++)); do
-    for ((i=0; i<${#S[@]}; i++)); do
-        accelerate launch -m metr.run_metr_fid \
-            --project_name for_paper_tests \
-            --run_name ${S[i]}_${messages[j]} --w_channel 3 --w_pattern ring \
-            --start 0 --end 5000 \
-            --with_tracking \
-            --w_radius 10 \
-            --run_generation \
-            --additional_metrics \
-            --run_no_w \
-            --image_folder worst_message/gen_${S[i]}_${messages[j]}  \
-            --msg_type binary \
-            --msg ${messages[j]} \
-            --msg_scaler ${S[i]} \
-            --target_clean_generated
-    done
-done
+# for ((j=0; j<${#messages[@]}; j++)); do
+#     for ((i=0; i<${#S[@]}; i++)); do
+#         accelerate launch -m metr.run_metr_fid \
+#             --project_name for_paper_tests \
+#             --run_name ${S[i]}_${messages[j]} --w_channel 3 --w_pattern ring \
+#             --start 0 --end 5000 \
+#             --with_tracking \
+#             --w_radius 10 \
+#             --run_generation \
+#             --additional_metrics \
+#             --run_no_w \
+#             --image_folder worst_message/gen_${S[i]}_${messages[j]}  \
+#             --msg_type binary \
+#             --msg ${messages[j]} \
+#             --msg_scaler ${S[i]} \
+#             --target_clean_generated
+#     done
+# done
