@@ -37,3 +37,9 @@ finetune_ldm_decoder
 
 fid_eval_*
 val_mock
+
+eval_st_sig_logs
+
+requirements.test.txt
+
+*.egg-info
