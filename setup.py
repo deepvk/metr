@@ -1,27 +1,15 @@
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
 import re
 from distutils.core import Command
 
 from setuptools import find_packages, setup
 
-
 # IMPORTANT:
 # 1. all dependencies should be listed here with their version requirements if any
 # 2. once modified, run: `make deps_table_update` to update src/tree-ring-watermark/dependency_versions_table.py
 _deps = [
-#    "torch==1.13.0",
-   "transformers==4.31.0",
-   "diffusers==0.14.0",
+    #    "torch==1.13.0",
+    "transformers==4.31.0",
+    "diffusers==0.14.0",
 ]
 
 # this is a lookup table with items like:
@@ -108,12 +96,10 @@ setup(
     package_dir={"": "src"},
     packages=find_packages("src"),
     include_package_data=True,
-    
     package_data={
         # 'tree_ring_watermark': ['src/tree_ring_watermark/open_clip/bpe_simple_vocab_16e6.txt.gz', 'src/tree_ring_watermark/open_clip/model_configs/*.json']
         "": ["*.gz", "*.json", "*.pth"]
     },
-
     python_requires=">=3.7.0",
     install_requires=install_requires,
     extras_require=extras,
@@ -152,4 +138,3 @@ setup(
 #      twine upload dist/* -r pypi
 # 8. Add release notes to the tag in github once everything is looking hunky-dory.
 # 9. Update the version in __init__.py, setup.py to the new version "-dev" and push to master
-

@@ -17,17 +17,11 @@ except ImportError:
 
 
 def gather_features(
-        image_features,
-        text_features,
-        local_loss=False,
-        gather_with_grad=False,
-        rank=0,
-        world_size=1,
-        use_horovod=False
+    image_features, text_features, local_loss=False, gather_with_grad=False, rank=0, world_size=1, use_horovod=False
 ):
-    assert has_distributed, 'torch.distributed did not import correctly, please use a PyTorch version with support.'
+    assert has_distributed, "torch.distributed did not import correctly, please use a PyTorch version with support."
     if use_horovod:
-        assert hvd is not None, 'Please install horovod'
+        assert hvd is not None, "Please install horovod"
         if gather_with_grad:
             all_image_features = hvd.allgather(image_features)
             all_text_features = hvd.allgather(text_features)
@@ -66,13 +60,13 @@ def gather_features(
 class ClipLoss(nn.Module):
 
     def __init__(
-            self,
-            local_loss=False,
-            gather_with_grad=False,
-            cache_labels=False,
-            rank=0,
-            world_size=1,
-            use_horovod=False,
+        self,
+        local_loss=False,
+        gather_with_grad=False,
+        cache_labels=False,
+        rank=0,
+        world_size=1,
+        use_horovod=False,
     ):
         super().__init__()
         self.local_loss = local_loss
@@ -102,8 +96,14 @@ class ClipLoss(nn.Module):
     def get_logits(self, image_features, text_features, logit_scale):
         if self.world_size > 1:
             all_image_features, all_text_features = gather_features(
-                image_features, text_features,
-                self.local_loss, self.gather_with_grad, self.rank, self.world_size, self.use_horovod)
+                image_features,
+                text_features,
+                self.local_loss,
+                self.gather_with_grad,
+                self.rank,
+                self.world_size,
+                self.use_horovod,
+            )
 
             if self.local_loss:
                 logits_per_image = logit_scale * image_features @ all_text_features.T
@@ -114,7 +114,7 @@ class ClipLoss(nn.Module):
         else:
             logits_per_image = logit_scale * image_features @ text_features.T
             logits_per_text = logit_scale * text_features @ image_features.T
-        
+
         return logits_per_image, logits_per_text
 
     def forward(self, image_features, text_features, logit_scale, output_dict=False):
@@ -123,26 +123,23 @@ class ClipLoss(nn.Module):
 
         labels = self.get_ground_truth(device, logits_per_image.shape[0])
 
-        total_loss = (
-            F.cross_entropy(logits_per_image, labels) +
-            F.cross_entropy(logits_per_text, labels)
-        ) / 2
+        total_loss = (F.cross_entropy(logits_per_image, labels) + F.cross_entropy(logits_per_text, labels)) / 2
 
         return {"contrastive_loss": total_loss} if output_dict else total_loss
 
 
 class CoCaLoss(ClipLoss):
     def __init__(
-            self,
-            caption_loss_weight,
-            clip_loss_weight,
-            pad_id=0,  # pad_token for open_clip custom tokenizer
-            local_loss=False,
-            gather_with_grad=False,
-            cache_labels=False,
-            rank=0,
-            world_size=1,
-            use_horovod=False,
+        self,
+        caption_loss_weight,
+        clip_loss_weight,
+        pad_id=0,  # pad_token for open_clip custom tokenizer
+        local_loss=False,
+        gather_with_grad=False,
+        cache_labels=False,
+        rank=0,
+        world_size=1,
+        use_horovod=False,
     ):
         super().__init__(
             local_loss=local_loss,
@@ -150,7 +147,7 @@ class CoCaLoss(ClipLoss):
             cache_labels=cache_labels,
             rank=rank,
             world_size=world_size,
-            use_horovod=use_horovod
+            use_horovod=use_horovod,
         )
 
         self.clip_loss_weight = clip_loss_weight
@@ -179,31 +176,28 @@ class DistillClipLoss(ClipLoss):
         return -(teacher_logits.softmax(dim=1) * student_logits.log_softmax(dim=1)).sum(dim=1).mean(dim=0)
 
     def forward(
-            self,
-            image_features,
-            text_features,
-            logit_scale,
-            dist_image_features,
-            dist_text_features,
-            dist_logit_scale,
-            output_dict=False,
+        self,
+        image_features,
+        text_features,
+        logit_scale,
+        dist_image_features,
+        dist_text_features,
+        dist_logit_scale,
+        output_dict=False,
     ):
-        logits_per_image, logits_per_text = \
-            self.get_logits(image_features, text_features, logit_scale)
+        logits_per_image, logits_per_text = self.get_logits(image_features, text_features, logit_scale)
 
-        dist_logits_per_image, dist_logits_per_text = \
-            self.get_logits(dist_image_features, dist_text_features, dist_logit_scale)
+        dist_logits_per_image, dist_logits_per_text = self.get_logits(
+            dist_image_features, dist_text_features, dist_logit_scale
+        )
 
         labels = self.get_ground_truth(image_features.device, logits_per_image.shape[0])
 
-        contrastive_loss = (
-            F.cross_entropy(logits_per_image, labels) +
-            F.cross_entropy(logits_per_text, labels)
-        ) / 2
+        contrastive_loss = (F.cross_entropy(logits_per_image, labels) + F.cross_entropy(logits_per_text, labels)) / 2
 
         distill_loss = (
-            self.dist_loss(dist_logits_per_image, logits_per_image) +
-            self.dist_loss(dist_logits_per_text, logits_per_text)
+            self.dist_loss(dist_logits_per_image, logits_per_image)
+            + self.dist_loss(dist_logits_per_text, logits_per_text)
         ) / 2
 
         if output_dict:

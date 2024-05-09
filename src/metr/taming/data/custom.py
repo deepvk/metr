@@ -1,9 +1,9 @@
 import os
-import numpy as np
-import albumentations
-from torch.utils.data import Dataset
 
-from taming.data.base import ImagePaths, NumpyPaths, ConcatDatasetWithIndex
+import albumentations
+import numpy as np
+from taming.data.base import ConcatDatasetWithIndex, ImagePaths, NumpyPaths
+from torch.utils.data import Dataset
 
 
 class CustomBase(Dataset):
@@ -17,7 +17,6 @@ class CustomBase(Dataset):
     def __getitem__(self, i):
         example = self.data[i]
         return example
-
 
 
 class CustomTrain(CustomBase):
@@ -34,5 +33,3 @@ class CustomTest(CustomBase):
         with open(test_images_list_file, "r") as f:
             paths = f.read().splitlines()
         self.data = ImagePaths(paths=paths, size=size, random_crop=False)
-
-

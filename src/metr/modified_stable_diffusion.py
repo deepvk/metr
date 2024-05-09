@@ -1,12 +1,11 @@
-
-from typing import Callable, List, Optional, Union, Any, Dict
 import copy
+from typing import Any, Callable, Dict, List, Optional, Union
+
 import numpy as np
 import PIL
-
 import torch
 from diffusers import StableDiffusionPipeline
-from diffusers.utils import logging, BaseOutput
+from diffusers.utils import BaseOutput, logging
 
 logger = logging.get_logger(__name__)  # pylint: disable=invalid-name
 
@@ -18,7 +17,8 @@ class ModifiedStableDiffusionPipelineOutput(BaseOutput):
 
 
 class ModifiedStableDiffusionPipeline(StableDiffusionPipeline):
-    def __init__(self,
+    def __init__(
+        self,
         vae,
         text_encoder,
         tokenizer,
@@ -28,14 +28,9 @@ class ModifiedStableDiffusionPipeline(StableDiffusionPipeline):
         feature_extractor,
         requires_safety_checker: bool = True,
     ):
-        super(ModifiedStableDiffusionPipeline, self).__init__(vae,
-                text_encoder,
-                tokenizer,
-                unet,
-                scheduler,
-                safety_checker,
-                feature_extractor,
-                requires_safety_checker)
+        super(ModifiedStableDiffusionPipeline, self).__init__(
+            vae, text_encoder, tokenizer, unet, scheduler, safety_checker, feature_extractor, requires_safety_checker
+        )
 
     @torch.no_grad()
     def __call__(
@@ -201,15 +196,14 @@ class ModifiedStableDiffusionPipeline(StableDiffusionPipeline):
         if not return_dict:
             return (image, has_nsfw_concept)
 
-        return ModifiedStableDiffusionPipelineOutput(images=image, nsfw_content_detected=has_nsfw_concept, init_latents=init_latents)
-
+        return ModifiedStableDiffusionPipelineOutput(
+            images=image, nsfw_content_detected=has_nsfw_concept, init_latents=init_latents
+        )
 
     @torch.inference_mode()
     def decode_image(self, latents: torch.FloatTensor, **kwargs):
         scaled_latents = 1 / 0.18215 * latents
-        image = [
-            self.vae.decode(scaled_latents[i : i + 1]).sample for i in range(len(latents))
-        ]
+        image = [self.vae.decode(scaled_latents[i : i + 1]).sample for i in range(len(latents))]
         image = torch.cat(image, dim=0)
         return image
 
