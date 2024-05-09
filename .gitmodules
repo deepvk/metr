@@ -1,0 +1,3 @@
+[submodule "WatermarkAttacker"]
+	path = WatermarkAttacker
+	url = https://github.com/Alphonsce/WatermarkAttacker
