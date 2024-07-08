@@ -27,7 +27,6 @@ from torchvision.transforms import ToPILImage
 # import utils_model
 
 
-
 def import_from_stable_sig(name):
     module = importlib.import_module(".stable_sig." + name, package=__package__)
     return module
@@ -37,10 +36,9 @@ utils = import_from_stable_sig("utils")
 utils_img = import_from_stable_sig("utils_img")
 utils_model = import_from_stable_sig("utils_model")
 
+import wandb
 from wm_attacks import ReSDPipeline
 from wm_attacks.wmattacker_no_saving import DiffWMAttacker, VAEWMAttacker
-
-import wandb
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 

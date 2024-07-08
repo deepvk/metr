@@ -9,14 +9,13 @@ import sys
 import numpy as np
 import PIL
 import torch
+import wandb
 from diffusers import DPMSolverMultistepScheduler
 from PIL import Image, ImageFile
 from pytorch_msssim import ssim
 from tqdm import tqdm
 from wm_attacks import ReSDPipeline
 from wm_attacks.wmattacker_with_saving import DiffWMAttacker, VAEWMAttacker
-
-import wandb
 
 from .inverse_stable_diffusion import InversableStableDiffusionPipeline
 from .io_utils import *

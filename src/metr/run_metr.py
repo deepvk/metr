@@ -12,13 +12,12 @@ from statistics import mean, stdev
 import numpy as np
 import PIL
 import torch
+import wandb
 from diffusers import DPMSolverMultistepScheduler
 from sklearn import metrics
 from tqdm import tqdm
 from wm_attacks import ReSDPipeline
 from wm_attacks.wmattacker_no_saving import DiffWMAttacker, VAEWMAttacker
-
-import wandb
 
 from .inverse_stable_diffusion import InversableStableDiffusionPipeline
 from .io_utils import *
@@ -28,11 +27,6 @@ from .pytorch_fid.fid_score import *
 from .stable_sig.utils_model import *
 
 # ------------
-
-
-
-
-
 
 
 def main(args):

@@ -1,7 +1,30 @@
-# METR watermark :tractor:
+# 🚜 METR: Message Enhanced Tree-Ring Watermarking
 
-## About
-This is the implementation of METR watermark. We propose an attack resistant watermark to inject large amount of unique messages without image quality reduction.
+This is the implementation of METR: attack-resistant watermarks with support of a large number of unique messages,
+but without image quality reduction.
+
+Our contribution
+- METR: improved Tree-Ring algorithm to support large number of unique messages for any diffusion model
+- METR++: special extension for LDM that integrates both METR and StableSignature watermarks
+
+## Table of Content
+
+<!-- TOC -->
+* [🚜 METR: Message Enhanced Tree-Ring Watermarking](#-metr-message-enhanced-tree-ring-watermarking)
+  * [Table of Content](#table-of-content)
+  * [Setup:](#setup)
+  * [Running METR:](#running-metr)
+    * [Generate images with a METR watermark:](#generate-images-with-a-metr-watermark)
+    * [Performs attacks](#performs-attacks)
+    * [Evaluate FID](#evaluate-fid)
+  * [Running METR++](#running-metr-1)
+    * [Fine-tune VAE decoder to given ID:](#fine-tune-vae-decoder-to-given-id)
+    * [Generate images with METR++ watermark:](#generate-images-with-metr-watermark)
+    * [Evaluate METR++](#evaluate-metr)
+  * [Reproducing](#reproducing)
+  * [References:](#references)
+  * [Citation](#citation)
+<!-- TOC -->
 
 ## Setup:
 
@@ -30,11 +53,11 @@ wandb login $WANDB_KEY
 accelerate config default
 ```
 
-## Running METR watermark:
+## Running METR:
 
-### METR Detection metrics to wandb:
+### Generate images with a METR watermark:
 
-#### Generate images with random message:
+1. Generate with a random message
 
 To save images locally include additional argument `--save_locally` and provide path with `--local_path /path/to/save`.
 
@@ -55,7 +78,7 @@ accelerate launch -m metr.run_metr \
   --local_path generated_images
 ```
 
-#### Generate image with fixed message and fixed prompt:
+2. Generate with a fixed message and fixed prompt:
 
 ```bash
 accelerate launch -m metr.run_metr \
@@ -73,7 +96,9 @@ accelerate launch -m metr.run_metr \
   --given_prompt "sci-fi bernese mountain dog"
 ```
 
-#### Perform diffusion model attack on METR:
+### Performs attacks
+
+Perform diffusion model attack on METR:
 
 ```bash
 accelerate launch -m metr.run_metr \
@@ -92,8 +117,9 @@ accelerate launch -m metr.run_metr \
   --diff_attack_steps 150
 ```
 
-### Evaluate FID for METR
-#### Download dataset and extract:
+### Evaluate FID
+
+1. Download dataset and extract:
 
 ```bash
 wget -O fid_outputs.zip https://huggingface.co/datasets/Alphonsce/MSCOCO_zip/resolve/main/fid_outputs.zip?download=true
@@ -101,7 +127,7 @@ unzip fid_outputs.zip
 ```
 [Google drive version if HF is not working](https://drive.google.com/drive/u/1/folders/1v0xj-8Yx8vZ_4qGsC5EU5FJBvEWTFmE3)
 
-#### FID on ground-truth images (FID gt):
+2. FID on ground-truth images (FID gt):
 
 Argument `--image_folder` is where images are saved.
 
@@ -122,7 +148,7 @@ accelerate launch -m metr.run_metr_fid \
   --msg_scaler 100
 ```
 
-#### FID on generated images (FID gen):
+3. FID on generated images (FID gen):
 To evaluate FID on generated images, add argument `--target_clean_generated`:
 
 ```bash
@@ -143,7 +169,8 @@ accelerate launch -m metr.run_metr_fid \
   --target_clean_generated
 ```
 
-## Running METR++ watermark
+## Running METR++
+
 We forked Stable Signature repository to adjust it to be comparable with METR. It can be found [here](https://github.com/Alphonsce/stable_signature/).
 
 Install weights for WM extractor for Stable Signature (taken from [official Stable-Signature repository](https://github.com/facebookresearch/stable_signature) )
@@ -168,7 +195,9 @@ wget -O ldm_decoder_checkpoint_000.pth https://huggingface.co/Alphonsce/St_Sig_v
 
 ### Fine-tune VAE decoder to given ID:
 
-In example down below we fine-tune VAE decoder on samples from MSCOCO dataset and evaluate on images previously generated with METR watermark in `generated_images` folder. Pretrained VAE decoder weights will be saved in `finetune_ldm_decoder/ldm_decoder_checkpoint_000.pth` by default. You can change the name of checkpoint with `--checkpoint_name` argument.
+In example down below we fine-tune VAE decoder on samples from MSCOCO dataset and evaluate on images previously generated with METR watermark in `generated_images` folder.
+Pretrained VAE decoder weights will be saved in `finetune_ldm_decoder/ldm_decoder_checkpoint_000.pth` by default.
+You can change the name of checkpoint with `--checkpoint_name` argument.
 
 ```bash
 TRAIN_DIR=fid_outputs/coco/ground_truth
@@ -191,8 +220,10 @@ VAL_DIR=generated_images/imgs_w
   --key_str 111010110101000001010111010011010100010000100111
 ```
 
-### Generate images with METR++ watermark and evaluate METR part of it:
+### Generate images with METR++ watermark:
+
 To generate images with METR++ watermark, just remove `--no_stable_sig` argument and provide a path to tuned VAE decoder: `--decoder_state_dict_path /path/to/decoder/weights`:
+
 ```bash
 VAE_DECODER_PATH=finetune_ldm_decoder/ldm_decoder_checkpoint_000.pth
 
@@ -214,8 +245,12 @@ accelerate launch -m metr.run_metr \
   --decoder_state_dict_path $VAE_DECODER_PATH
 ```
 
-### Evaluate Stable Signature part of METR++
+### Evaluate METR++
+
+1. Evaluate Stable Signature part of METR++
+
 Evaluation is performed on a folder of generated images, you need to pass folder into `--` with images generated with Stable-Signature watermark.
+
 ```bash
 EVAL_FOLDER=metr_pp_generated_images/imgs_w
 
@@ -231,7 +266,8 @@ accelerate launch -m metr.metr_pp_eval_stable_sig \
   --key_str 111010110101000001010111010011010100010000100111
 ```
 
-### Evaluate FID for METR++:
+2. Evaluate FID for METR++:
+
 To evaluate FID for images with METR++ watermark pass `--use_stable_sig` argument.
 ```bash
 accelerate launch -m metr.run_metr_fid \
@@ -251,102 +287,17 @@ accelerate launch -m metr.run_metr_fid \
   --msg_scaler 100 \
   --use_stable_sig
 ```
----
-# Reproducing experiments from paper:
 
-## Diffusion and VAE attack on METR:
+## Reproducing
 
-### Diffusion attack:
-```bash
-bash scripts/metr_generative_att/diff_att_metr.sh
-```
-### VAE attack:
-```bash
-bash scripts/metr_generative_att/vae_2018_att_metr.sh
-```
+To reproduce all experiments from our paper see [`reproducibility.md`](./reproducibility.md)
 
-## All attacks on METR:
-### Detection:
-```bash 
-bash scripts/metr_all_att/detect_metr_default_vae.sh
-```
-### Image Quality:
-```bash
-# FID gt
-bash scripts/metr_all_att/fid_gt_all_att_metr.sh
-# FID gen
-bash scripts/metr_all_att/fid_gen_all_att_metr.sh
-```
+## References:
 
-## METR Image quality dispersion because of different message:
-```bash
-# FID gt:
-bash scripts/fid_message_dispersion/gt.sh
-# FID gen:
-bash scripts/fid_message_dispersion/gen.sh
-```
+1. Tree-Ring watermark ([Repository](https://github.com/YuxinWenRick/tree-ring-watermark), [Paper](https://arxiv.org/abs/2305.20030))
+2. Stable Signature ([Repository](https://github.com/facebookresearch/stable_signature), [Paper](https://arxiv.org/abs/2303.15435))
+3. Generative Model watermark attacker ([Repository](https://github.com/XuandongZhao/WatermarkAttacker), [Paper](https://arxiv.org/abs/2306.01953))
 
-## All attacks on METR++:
-### METR with fine-tuned VAE decoder:
-```bash 
-bash scripts/metr_pp_all_att/detect_metr_changed_vae.sh
-```
+## Citation
 
-### Stable-Signature part of METR++:
-```bash
-# Generate images:
-bash scripts/metr_pp_all_att/stable_sig_attacks/generate.sh
-# Evaluate:
-bash scripts/metr_pp_all_att/stable_sig_attacks/eval.sh
-```
-
-### Image quality:
-```bash
-# FID gt:
-scripts/metr_all_att/fid_gt_all_att_metr.sh
-# FID gen:
-scripts/metr_all_att/fid_gen_all_att_metr.sh
-```
-
-## Stable-Signature tuned on images sampled from different distributions:
-
-To run this, one need to have folder called `generated_images`, that was created using script provided in [section](#metr-detection-metrics-to-wandb).
-
-Create mock val directory named `val_mock` with 1 image to run following scripts without error:
-```bash
-mkdir val_mock
-cp fid_outputs/coco/ground_truth/000000000139.jpg val_mock
-```
-
-Run all fine-tunings, generations and evaluations:
-
-```bash
-# N-N
-bash scripts/stable_sig_different_distr/N-N.sh
-# N-METR
-bash scripts/stable_sig_different_distr/N-METR.sh
-# METR-N
-bash scripts/stable_sig_different_distr/METR-N.sh
-# METR-METR
-bash scripts/stable_sig_different_distr/METR-METR.sh
-```
----
-# References:
-
-## Tree-Ring watermark:
-
-### [Repository link](https://github.com/YuxinWenRick/tree-ring-watermark)
-
-### [Paper link](https://arxiv.org/abs/2305.20030)
-
-## Stable Signature:
-
-### [Repository link](https://github.com/facebookresearch/stable_signature)
-
-### [Paper link](https://arxiv.org/abs/2303.15435)
-
-## Generative Model watermark attacker:
-
-### [Repository link](https://github.com/XuandongZhao/WatermarkAttacker)
-
-### [Paper link](https://arxiv.org/abs/2306.01953)
+TODO

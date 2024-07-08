@@ -28,7 +28,6 @@ from torchvision.utils import save_image
 # import .stable_sig.utils_model
 
 
-
 def import_from_stable_sig(name):
     module = importlib.import_module(".stable_sig." + name, package=__package__)
     return module
@@ -38,9 +37,8 @@ utils = import_from_stable_sig("utils")
 utils_img = import_from_stable_sig("utils_img")
 utils_model = import_from_stable_sig("utils_model")
 
-from tqdm import tqdm
-
 import wandb
+from tqdm import tqdm
 
 # sys.path.append('src')
 from .ldm.models.autoencoder import AutoencoderKL
