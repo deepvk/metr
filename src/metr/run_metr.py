@@ -368,7 +368,7 @@ if __name__ == "__main__":
     parser.add_argument("--w_seed", default=999999, type=int)
     parser.add_argument("--w_channel", default=3, type=int)
     parser.add_argument("--w_pattern", default="ring")
-    parser.add_argument("--w_mask_shape", default="circle")
+    parser.add_argument("--w_mask_shape", default="circle", help="Can be 'ring-id' or 'circle' for default METR / Tree-Ring")
     parser.add_argument("--w_radius", default=10, type=int)
     parser.add_argument("--w_measurement", default="l1_complex")
     parser.add_argument("--w_injection", default="complex")

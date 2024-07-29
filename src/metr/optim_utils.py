@@ -126,6 +126,33 @@ def circle_mask(size=64, r=10, x_offset=0, y_offset=0):
 
     return ((x - x0) ** 2 + (y - y0) ** 2) <= r**2
 
+def rotate_pixel(size, r):
+    image = np.zeros((size, size), dtype=np.uint8)
+    center = size // 2
+    one_pixel = np.zeros_like(image)
+    one_pixel[center + r][center] = 1
+
+    for rot_angle in np.linspace(0, 360, 360):
+        pil_pixel = Image.fromarray(one_pixel)
+        rot_image = np.array(pil_pixel.rotate(rot_angle, center=(center + 0.5, center + 0.5)))
+        image = image + rot_image
+
+    return image.astype(bool).astype(int)
+
+def ring_id_mask(size, r):
+    mask_full = np.zeros([size, size])
+    for radius in range(1, r + 1):
+        mask_full += rotate_pixel(radius, size)
+    
+    return mask_full.astype(bool)
+
+def ring_id_gt_patch(size, r, args=None):
+    gt_patch = np.zeros([size, size])
+
+    for radius in range(1, r + 1):
+        gt_patch += rotate_pixel(radius, size) * args.msg_scaler * (-1) ** radius
+    return gt_patch
+
 
 def get_watermarking_mask(init_latents_w, args, device):
     watermarking_mask = torch.zeros(init_latents_w.shape, dtype=torch.bool).to(device)
@@ -139,6 +166,16 @@ def get_watermarking_mask(init_latents_w, args, device):
             watermarking_mask[:, :] = torch_mask
         else:
             watermarking_mask[:, args.w_channel] = torch_mask
+
+    if args.w_mask_shape == "ring-id":
+        np_mask = ring_id_mask(init_latents_w.shape[-1], r=args.w_radius)
+        torch_mask = torch.tensor(np_mask).to(device)
+        if args.w_channel == -1:
+            # all channels
+            watermarking_mask[:, :] = torch_mask
+        else:
+            watermarking_mask[:, args.w_channel] = torch_mask
+        
     elif args.w_mask_shape == "square":
         anchor_p = init_latents_w.shape[-1] // 2
         if args.w_channel == -1:

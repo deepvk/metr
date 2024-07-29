@@ -43,3 +43,6 @@ eval_st_sig_logs
 requirements.test.txt
 
 *.egg-info
+
+test.sh
+/tests
