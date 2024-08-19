@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: If you use this software, please cite both the article from preferred-citation and the software itself.
+type: software
+title: 'METR: Image Watermarking with Large Number of Unique Messages'
+version: 1.0.0
+authors:
+  - given-names: Alexander
+    family-names: Varlamov
+    affiliation: MIPT, VK Lab
+    email: varlamow.sas@gmail.com
+  - given-names: Daria
+    family-names: Diatlova
+    affiliation: deepvk
+    email: d.dyatlova@vk.team
+  - given-names: Egor
+    family-names: Spirin
+    affiliation: VK Lab
+    email: spirin.egor@gmail.com
+identifiers:
+  - type: url
+    value: 'https://arxiv.org/abs/2408.08340'
+    description: arXiv preprint
+repository-code: 'https://github.com/deepvk/metr'
+license: Apache-2.0
